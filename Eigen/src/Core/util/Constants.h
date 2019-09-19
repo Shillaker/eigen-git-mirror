@@ -471,6 +471,7 @@ namespace Architecture
     VSX = 0x3,
     NEON = 0x4,
     MSA = 0x5,
+    WASM = 0x6,
 #if defined EIGEN_VECTORIZE_SSE
     Target = SSE
 #elif defined EIGEN_VECTORIZE_ALTIVEC

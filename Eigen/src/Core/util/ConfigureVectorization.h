@@ -368,7 +368,7 @@
       #include <msa.h>
     #endif
 
-  #elif defined __WASM__
+  #elif defined __wasm_simd128__
     // Include WebAssembly intrinsics
     extern "C" {
         #include <wasm_simd128.h>

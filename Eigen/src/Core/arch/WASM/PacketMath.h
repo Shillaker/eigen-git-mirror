@@ -7,27 +7,26 @@ namespace Eigen {
 #define EIGEN_CACHEFRIENDLY_PRODUCT_THRESHOLD 8
 #define EIGEN_ARCH_DEFAULT_NUMBER_OF_REGISTERS 8
 
-        typedef float __f32x4
-        Packet4f;
-        typedef int __i32x4
-        Packet4i;
-        typedef double __f64x2
-        Packet2d;
+        typedef __f32x4 Packet4f;
+        typedef __i32x4 Packet4i;
+        typedef __f64x2 Packet2d;
 
         template<>
-        struct is_arithmetic<float __f32x4> {
+        struct is_arithmetic<Packet4f> {
             enum {
                 value = true
             };
         };
+
         template<>
-        struct is_arithmetic<int __i32x4> {
+        struct is_arithmetic<Packet4i> {
             enum {
                 value = true
             };
         };
+
         template<>
-        struct is_arithmetic<double __f64x2> {
+        struct is_arithmetic<Packet2d> {
             enum {
                 value = true
             };
