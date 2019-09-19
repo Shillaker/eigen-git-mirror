@@ -58,22 +58,7 @@ namespace Eigen {
         Packet2d prsqrt<Packet2d>(const Packet2d &x) {
             return wasm_f64x2_div(pset1<Packet2d>(1.0), wasm_f64x2_sqrt(x));
         }
-
-        template<> EIGEN_DEFINE_FUNCTION_ALLOWING_MULTIPLE_DEFINITIONS EIGEN_UNUSED
-        Packet4f ptanh<Packet4f>(const Packet4f &x) {
-            return internal::generic_fast_tanh_float(x);
-        }
-    }
-
-    namespace numext {
-        template<> EIGEN_DEVICE_FUNC EIGEN_ALWAYS_INLINE
-        float sqrt(const float &x) {
-            return internal::pfirst(internal::Packet4f(wasm_f32x4_sqrt(x)));
-        }
-
-        template<> EIGEN_DEVICE_FUNC EIGEN_ALWAYS_INLINE
-        double sqrt(const double &x) {
-            return internal::pfirst(internal::Packet2d(wasm_f64x2_sqrt(x)));
-        }
     }
 }
+
+#endif
