@@ -481,6 +481,8 @@ namespace Architecture
     Target = NEON
 #elif defined EIGEN_VECTORIZE_MSA
     Target = MSA
+#elif defined EIGEN_VECTORIZE_WASM
+    Target = WASM
 #else
     Target = Generic
 #endif

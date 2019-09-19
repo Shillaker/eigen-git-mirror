@@ -214,7 +214,6 @@
 
 
 #if !(defined(EIGEN_DONT_VECTORIZE) || defined(EIGEN_GPUCC))
-
   #if defined (EIGEN_SSE2_ON_NON_MSVC_BUT_NOT_OLD_GCC) || defined(EIGEN_SSE2_ON_MSVC_2008_OR_LATER)
 
     // Defines symbols for compile-time detection of which instructions are
@@ -369,6 +368,17 @@
       #include <msa.h>
     #endif
 
+  #elif defined __WASM__
+    // Include WebAssembly intrinsics
+    extern "C" {
+        #include <wasm_simd128.h>
+    }
+
+    // Explicitly switch off fast math for now
+    #define EIGEN_FAST_MATH 0
+
+    #define EIGEN_VECTORIZE
+    #define EIGEN_VECTORIZE_WASM
   #endif
 #endif
 
@@ -436,6 +446,8 @@ inline static const char *SimdInstructionSetsInUse(void) {
   return "S390X ZVECTOR";
 #elif defined(EIGEN_VECTORIZE_MSA)
   return "MIPS MSA";
+#elif defined(EIGENVECTORIZE_WASM)
+  return "WASM";
 #else
   return "None";
 #endif

@@ -210,6 +210,9 @@ using std::ptrdiff_t;
   #include "src/Core/arch/MSA/PacketMath.h"
   #include "src/Core/arch/MSA/MathFunctions.h"
   #include "src/Core/arch/MSA/Complex.h"
+#elif defined EIGEN_VECTORIZE_WASM
+  #include "src/Core/arch/WASM/MathFunctions.h"
+  #include "src/Core/arch/WASM/PacketMath.h"
 #endif
 
 #if defined EIGEN_VECTORIZE_GPU
