@@ -374,9 +374,6 @@
         #include <wasm_simd128.h>
     }
 
-    // Explicitly switch off fast math for now
-    #define EIGEN_FAST_MATH 0
-
     #define EIGEN_VECTORIZE
     #define EIGEN_VECTORIZE_WASM
   #endif
