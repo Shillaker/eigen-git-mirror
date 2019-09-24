@@ -55,7 +55,7 @@ template<> EIGEN_STRONG_INLINE Packet2cf pnegate(const Packet2cf& a) { return Pa
 template<> EIGEN_STRONG_INLINE Packet2cf pconj(const Packet2cf& a) {
     // Complex conjugate
     // conj(a + bi) = a - bi
-    const v128_t conjMask = wasm_i32x4_const(0, -0, 0, -0);
+    const v128_t conjMask = wasm_f32x4_const(0.0f, -0.0f, 0.0f, -0.0f);
     return Packet2cf(wasm_v128_xor(a.v, conjMask));
 }
 
@@ -69,14 +69,14 @@ template<> EIGEN_STRONG_INLINE Packet2cf pmul<Packet2cf>(const Packet2cf& a, con
     // b = 8, 9, 10, 11
     // y = 12, 13, 14, 15
 
-    // Real part
+    // Reals of first multiplied by second
     Packet4f reals = pmul<Packet4f>(
             wasm_v8x16_shuffle(a.v, a.v, 0, 1, 2, 3, 0, 1, 2, 3, 8, 9, 10, 11, 8, 9, 10, 11),
             b.v
     );
 
-    // Imaginary part
-    const v128_t mask = wasm_i32x4_const(-0, 0, -0, 0);
+    // Imaginary of first multiplied by second
+    const v128_t mask = wasm_f32x4_const(-0.0f, 0.0f, -0.0f, 0.0f);
     Packet4f imags = wasm_v128_xor(pmul<Packet4f>(
             wasm_v8x16_shuffle(a.v, a.v, 4, 5, 6, 7, 4, 5, 6, 7, 12, 13, 14, 15, 12, 13, 14, 15),
             wasm_v8x16_shuffle(b.v, b.v, 4, 5, 6, 7, 0, 1, 2, 3, 12, 13, 14, 15, 8, 9, 10, 11)

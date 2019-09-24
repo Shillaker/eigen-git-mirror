@@ -312,43 +312,43 @@ template<> EIGEN_STRONG_INLINE int predux_mul<Packet4i>(const Packet4i& a) {
 }
 
 EIGEN_DEVICE_FUNC inline void ptranspose(PacketBlock<Packet4f,4>& kernel) {
-    // 4x4 matrix transposition. Diagonal remains same, then can do 6
-    // swaps of cells
+    // 4x4 matrix transposition. Diagonal remains same, then can do 6 swaps of cells
+    // TODO This is horribly inefficient
 
     // Swap 01 and 10
     float tmp = wasm_f32x4_extract_lane(kernel.packet[0], 1);
-    wasm_f32x4_replace_lane(kernel.packet[0], 1, wasm_f32x4_extract_lane(kernel.packet[1], 0));
-    wasm_f32x4_replace_lane(kernel.packet[1], 0, tmp);
+    kernel.packet[0] =wasm_f32x4_replace_lane(kernel.packet[0], 1, wasm_f32x4_extract_lane(kernel.packet[1], 0));
+    kernel.packet[1] = wasm_f32x4_replace_lane(kernel.packet[1], 0, tmp);
 
     // Swap 02 and 20
     tmp = wasm_f32x4_extract_lane(kernel.packet[0], 2);
-    wasm_f32x4_replace_lane(kernel.packet[0], 2, wasm_f32x4_extract_lane(kernel.packet[2], 0));
-    wasm_f32x4_replace_lane(kernel.packet[2], 0, tmp);
+    kernel.packet[0] = wasm_f32x4_replace_lane(kernel.packet[0], 2, wasm_f32x4_extract_lane(kernel.packet[2], 0));
+    kernel.packet[2] = wasm_f32x4_replace_lane(kernel.packet[2], 0, tmp);
 
     // Swap 03 and 30
     tmp = wasm_f32x4_extract_lane(kernel.packet[0], 3);
-    wasm_f32x4_replace_lane(kernel.packet[0], 3, wasm_f32x4_extract_lane(kernel.packet[3], 0));
-    wasm_f32x4_replace_lane(kernel.packet[3], 0, tmp);
+    kernel.packet[0] = wasm_f32x4_replace_lane(kernel.packet[0], 3, wasm_f32x4_extract_lane(kernel.packet[3], 0));
+    kernel.packet[3] =wasm_f32x4_replace_lane(kernel.packet[3], 0, tmp);
 
     // Swap 04 and 40
     tmp = wasm_f32x4_extract_lane(kernel.packet[0], 4);
-    wasm_f32x4_replace_lane(kernel.packet[0], 4, wasm_f32x4_extract_lane(kernel.packet[4], 0));
-    wasm_f32x4_replace_lane(kernel.packet[4], 0, tmp);
+    kernel.packet[0] = wasm_f32x4_replace_lane(kernel.packet[0], 4, wasm_f32x4_extract_lane(kernel.packet[4], 0));
+    kernel.packet[4] = wasm_f32x4_replace_lane(kernel.packet[4], 0, tmp);
 
     // Swap 12 and 21
     tmp = wasm_f32x4_extract_lane(kernel.packet[1], 2);
-    wasm_f32x4_replace_lane(kernel.packet[1], 2, wasm_f32x4_extract_lane(kernel.packet[2], 1));
-    wasm_f32x4_replace_lane(kernel.packet[2], 1, tmp);
+    kernel.packet[1] = wasm_f32x4_replace_lane(kernel.packet[1], 2, wasm_f32x4_extract_lane(kernel.packet[2], 1));
+    kernel.packet[2] = wasm_f32x4_replace_lane(kernel.packet[2], 1, tmp);
 
     // Swap 13 and 31
     tmp = wasm_f32x4_extract_lane(kernel.packet[1], 3);
-    wasm_f32x4_replace_lane(kernel.packet[1], 3, wasm_f32x4_extract_lane(kernel.packet[3], 1));
-    wasm_f32x4_replace_lane(kernel.packet[3], 1, tmp);
+    kernel.packet[1] = wasm_f32x4_replace_lane(kernel.packet[1], 3, wasm_f32x4_extract_lane(kernel.packet[3], 1));
+    kernel.packet[3] = wasm_f32x4_replace_lane(kernel.packet[3], 1, tmp);
 
     // Swap 23 and 32
     tmp = wasm_f32x4_extract_lane(kernel.packet[2], 3);
-    wasm_f32x4_replace_lane(kernel.packet[2], 3, wasm_f32x4_extract_lane(kernel.packet[3], 2));
-    wasm_f32x4_replace_lane(kernel.packet[3], 2, tmp);
+    kernel.packet[2] = wasm_f32x4_replace_lane(kernel.packet[2], 3, wasm_f32x4_extract_lane(kernel.packet[3], 2));
+    kernel.packet[3] = wasm_f32x4_replace_lane(kernel.packet[3], 2, tmp);
 }
 
 EIGEN_DEVICE_FUNC inline void ptranspose(PacketBlock<Packet2d,2>& kernel) {
@@ -363,38 +363,38 @@ EIGEN_DEVICE_FUNC inline void ptranspose(PacketBlock<Packet4i,4>& kernel) {
 
     // Swap 01 and 10
     int tmp = wasm_i32x4_extract_lane(kernel.packet[0], 1);
-    wasm_i32x4_replace_lane(kernel.packet[0], 1, wasm_i32x4_extract_lane(kernel.packet[1], 0));
-    wasm_i32x4_replace_lane(kernel.packet[1], 0, tmp);
+    kernel.packet[0] = wasm_i32x4_replace_lane(kernel.packet[0], 1, wasm_i32x4_extract_lane(kernel.packet[1], 0));
+    kernel.packet[1] = wasm_i32x4_replace_lane(kernel.packet[1], 0, tmp);
 
     // Swap 02 and 20
     tmp = wasm_i32x4_extract_lane(kernel.packet[0], 2);
-    wasm_i32x4_replace_lane(kernel.packet[0], 2, wasm_i32x4_extract_lane(kernel.packet[2], 0));
-    wasm_i32x4_replace_lane(kernel.packet[2], 0, tmp);
+    kernel.packet[0] = wasm_i32x4_replace_lane(kernel.packet[0], 2, wasm_i32x4_extract_lane(kernel.packet[2], 0));
+    kernel.packet[2] = wasm_i32x4_replace_lane(kernel.packet[2], 0, tmp);
 
     // Swap 03 and 30
     tmp = wasm_i32x4_extract_lane(kernel.packet[0], 3);
-    wasm_i32x4_replace_lane(kernel.packet[0], 3, wasm_i32x4_extract_lane(kernel.packet[3], 0));
-    wasm_i32x4_replace_lane(kernel.packet[3], 0, tmp);
+    kernel.packet[0] = wasm_i32x4_replace_lane(kernel.packet[0], 3, wasm_i32x4_extract_lane(kernel.packet[3], 0));
+    kernel.packet[3] = wasm_i32x4_replace_lane(kernel.packet[3], 0, tmp);
 
     // Swap 04 and 40
     tmp = wasm_i32x4_extract_lane(kernel.packet[0], 4);
-    wasm_i32x4_replace_lane(kernel.packet[0], 4, wasm_i32x4_extract_lane(kernel.packet[4], 0));
-    wasm_i32x4_replace_lane(kernel.packet[4], 0, tmp);
+    kernel.packet[0] = wasm_i32x4_replace_lane(kernel.packet[0], 4, wasm_i32x4_extract_lane(kernel.packet[4], 0));
+    kernel.packet[4] = wasm_i32x4_replace_lane(kernel.packet[4], 0, tmp);
 
     // Swap 12 and 21
     tmp = wasm_i32x4_extract_lane(kernel.packet[1], 2);
-    wasm_i32x4_replace_lane(kernel.packet[1], 2, wasm_i32x4_extract_lane(kernel.packet[2], 1));
-    wasm_i32x4_replace_lane(kernel.packet[2], 1, tmp);
+    kernel.packet[1] = wasm_i32x4_replace_lane(kernel.packet[1], 2, wasm_i32x4_extract_lane(kernel.packet[2], 1));
+    kernel.packet[2] = wasm_i32x4_replace_lane(kernel.packet[2], 1, tmp);
 
     // Swap 13 and 31
     tmp = wasm_i32x4_extract_lane(kernel.packet[1], 3);
-    wasm_i32x4_replace_lane(kernel.packet[1], 3, wasm_i32x4_extract_lane(kernel.packet[3], 1));
-    wasm_i32x4_replace_lane(kernel.packet[3], 1, tmp);
+    kernel.packet[1] = wasm_i32x4_replace_lane(kernel.packet[1], 3, wasm_i32x4_extract_lane(kernel.packet[3], 1));
+    kernel.packet[3] = wasm_i32x4_replace_lane(kernel.packet[3], 1, tmp);
 
     // Swap 23 and 32
     tmp = wasm_i32x4_extract_lane(kernel.packet[2], 3);
-    wasm_i32x4_replace_lane(kernel.packet[2], 3, wasm_i32x4_extract_lane(kernel.packet[3], 2));
-    wasm_i32x4_replace_lane(kernel.packet[3], 2, tmp);
+    kernel.packet[2] = wasm_i32x4_replace_lane(kernel.packet[2], 3, wasm_i32x4_extract_lane(kernel.packet[3], 2));
+    kernel.packet[3] = wasm_i32x4_replace_lane(kernel.packet[3], 2, tmp);
 }
 
 }

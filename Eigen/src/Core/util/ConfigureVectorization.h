@@ -443,7 +443,7 @@ inline static const char *SimdInstructionSetsInUse(void) {
   return "S390X ZVECTOR";
 #elif defined(EIGEN_VECTORIZE_MSA)
   return "MIPS MSA";
-#elif defined(EIGENVECTORIZE_WASM)
+#elif defined(EIGEN_VECTORIZE_WASM)
   return "WASM";
 #else
   return "None";
