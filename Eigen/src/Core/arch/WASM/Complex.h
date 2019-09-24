@@ -53,35 +53,36 @@ template<> EIGEN_STRONG_INLINE Packet2cf psub<Packet2cf>(const Packet2cf& a, con
 template<> EIGEN_STRONG_INLINE Packet2cf pnegate(const Packet2cf& a) { return Packet2cf(wasm_f32x4_neg(a.v)); }
 
 template<> EIGEN_STRONG_INLINE Packet2cf pconj(const Packet2cf& a) {
-    // TODO - more efficient version
-    // Complex conjugate, remember conj(a + bi) = a - bi
-    return Packet2cf(wasm_f32x4_make(
-        wasm_f32x4_extract_lane(a.v, 0),
-        -1 * wasm_f32x4_extract_lane(a.v, 1),
-        wasm_f32x4_extract_lane(a.v, 2),
-        -1 * wasm_f32x4_extract_lane(a.v, 3)
-    ));
+    // Complex conjugate
+    // conj(a + bi) = a - bi
+    const v128_t conjMask = wasm_i32x4_const(0, -0, 0, -0);
+    return Packet2cf(wasm_v128_xor(a.v, conjMask));
 }
 
 template<> EIGEN_STRONG_INLINE Packet2cf pmul<Packet2cf>(const Packet2cf& a, const Packet2cf& b) {
-    // TODO - more efficient version
     // Complex multiplication on two sets of two numbers.
-    // Two results stored in the final packet
-    // Remember (a + xi) * (b + yi) = (ab - xy) + (ay + bx)i
+    // (a + xi) * (b + yi) = (ab - xy) + (ay + bx)i
 
-    // Multiplication one
-    float real1 = (wasm_f32x4_extract_lane(a.v, 0) * wasm_f32x4_extract_lane(b.v, 0))
-            - (wasm_f32x4_extract_lane(a.v, 1) * wasm_f32x4_extract_lane(b.v, 1));
-    float imag1 = (wasm_f32x4_extract_lane(a.v, 0) * wasm_f32x4_extract_lane(b.v, 1))
-            + (wasm_f32x4_extract_lane(b.v, 0) * wasm_f32x4_extract_lane(a.v, 1));
+    // WASM shuffling only available in chunks of 8 bytes so for a given complex pair, the byte indices are:
+    // a = 0, 1, 2, 3
+    // x = 4, 5, 6, 7
+    // b = 8, 9, 10, 11
+    // y = 12, 13, 14, 15
 
-    float real2 = (wasm_f32x4_extract_lane(a.v, 2) * wasm_f32x4_extract_lane(b.v, 2))
-                  - (wasm_f32x4_extract_lane(a.v, 3) * wasm_f32x4_extract_lane(b.v, 3));
-    float imag2 = (wasm_f32x4_extract_lane(a.v, 2) * wasm_f32x4_extract_lane(b.v, 3))
-                  + (wasm_f32x4_extract_lane(b.v, 2) * wasm_f32x4_extract_lane(a.v, 3));
+    // Real part
+    Packet4f reals = pmul<Packet4f>(
+            wasm_v8x16_shuffle(a.v, a.v, 0, 1, 2, 3, 0, 1, 2, 3, 8, 9, 10, 11, 8, 9, 10, 11),
+            b.v
+    );
 
-    // Reconstruct final result
-    return Packet2cf(wasm_f32x4_make(real1, imag1, real2, imag2));
+    // Imaginary part
+    const v128_t mask = wasm_i32x4_const(-0, 0, -0, 0);
+    Packet4f imags = wasm_v128_xor(pmul<Packet4f>(
+            wasm_v8x16_shuffle(a.v, a.v, 4, 5, 6, 7, 4, 5, 6, 7, 12, 13, 14, 15, 12, 13, 14, 15),
+            wasm_v8x16_shuffle(b.v, b.v, 4, 5, 6, 7, 0, 1, 2, 3, 12, 13, 14, 15, 8, 9, 10, 11)
+    ), mask);
+
+    return Packet2cf(padd<Packet4f>(reals, imags));
 }
 
 template<> EIGEN_STRONG_INLINE Packet2cf ptrue<Packet2cf>(const Packet2cf& a) { return Packet2cf(ptrue(Packet4f(a.v))); }
