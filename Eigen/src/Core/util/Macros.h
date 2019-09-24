@@ -784,6 +784,8 @@
 #ifndef EIGEN_STRONG_INLINE
 #if EIGEN_COMP_MSVC || EIGEN_COMP_ICC
 #define EIGEN_STRONG_INLINE __forceinline
+#elifdef __wasm__
+#define EIGEN_STRONG_INLINE __inline__
 #else
 #define EIGEN_STRONG_INLINE inline
 #endif

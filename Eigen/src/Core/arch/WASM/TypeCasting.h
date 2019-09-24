@@ -30,6 +30,14 @@ template<> EIGEN_STRONG_INLINE Packet4f pcast<Packet4i, Packet4f>(const Packet4i
   return wasm_f32x4_convert_i32x4(a);
 }
 
+template<> EIGEN_STRONG_INLINE Packet4i preinterpret<Packet4i,Packet4f>(const Packet4f& a) {
+    return (Packet4i) a;
+}
+
+template<> EIGEN_STRONG_INLINE Packet4f preinterpret<Packet4f,Packet4i>(const Packet4i& a) {
+    return (Packet4f) a;
+}
+
 }
 }
 
