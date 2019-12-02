@@ -329,12 +329,7 @@ EIGEN_DEVICE_FUNC inline void ptranspose(PacketBlock<Packet4f,4>& kernel) {
     tmp = wasm_f32x4_extract_lane(kernel.packet[0], 3);
     kernel.packet[0] = wasm_f32x4_replace_lane(kernel.packet[0], 3, wasm_f32x4_extract_lane(kernel.packet[3], 0));
     kernel.packet[3] =wasm_f32x4_replace_lane(kernel.packet[3], 0, tmp);
-
-    // Swap 04 and 40
-    tmp = wasm_f32x4_extract_lane(kernel.packet[0], 4);
-    kernel.packet[0] = wasm_f32x4_replace_lane(kernel.packet[0], 4, wasm_f32x4_extract_lane(kernel.packet[4], 0));
-    kernel.packet[4] = wasm_f32x4_replace_lane(kernel.packet[4], 0, tmp);
-
+    
     // Swap 12 and 21
     tmp = wasm_f32x4_extract_lane(kernel.packet[1], 2);
     kernel.packet[1] = wasm_f32x4_replace_lane(kernel.packet[1], 2, wasm_f32x4_extract_lane(kernel.packet[2], 1));
@@ -375,11 +370,6 @@ EIGEN_DEVICE_FUNC inline void ptranspose(PacketBlock<Packet4i,4>& kernel) {
     tmp = wasm_i32x4_extract_lane(kernel.packet[0], 3);
     kernel.packet[0] = wasm_i32x4_replace_lane(kernel.packet[0], 3, wasm_i32x4_extract_lane(kernel.packet[3], 0));
     kernel.packet[3] = wasm_i32x4_replace_lane(kernel.packet[3], 0, tmp);
-
-    // Swap 04 and 40
-    tmp = wasm_i32x4_extract_lane(kernel.packet[0], 4);
-    kernel.packet[0] = wasm_i32x4_replace_lane(kernel.packet[0], 4, wasm_i32x4_extract_lane(kernel.packet[4], 0));
-    kernel.packet[4] = wasm_i32x4_replace_lane(kernel.packet[4], 0, tmp);
 
     // Swap 12 and 21
     tmp = wasm_i32x4_extract_lane(kernel.packet[1], 2);
